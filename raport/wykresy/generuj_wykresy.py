@@ -61,9 +61,10 @@ def load_cfd_data(excel_path):
     df['Sila'] = df['Sila'] * 2.0
     df['Moment'] = df['Moment'] * 2.0
     
-    # Przeliczenie mocy dla pełnego śmigła (P = omega * Q_full, gdzie omega = 300 rad/s)
+    # Przeliczenie mocy dla pełnego śmigła (P = omega * Q_full, omega = 2*pi*3000/60 = 314,159 rad/s)
     # Dla ujemnego momentu zachowujemy odpowiedni znak mocy
-    df['Moc'] = df['Moment'] * 300.0
+    OMEGA = 2.0 * np.pi * 3000.0 / 60.0  # 314,159 rad/s dla n = 3000 RPM
+    df['Moc'] = df['Moment'] * OMEGA
     
     # Przeliczenie sprawności eta = (T_full * V) / P_full * 100%
     # Dla V=0 lub P<=0 sprawność wynosi 0%

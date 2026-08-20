@@ -120,9 +120,9 @@
 	Siatkę należy zagęścić w otoczeniu łopat, na krawędzi natarcia i spływu, przy końcówkach łopat oraz w śladzie za śmigłem. W warstwie przyściennej stosuje się warstwy pryzmatyczne, aby poprawnie odwzorować gradienty prędkości. Przejście między strefą obrotową i nieruchomą musi być zgodne z powierzchnią \textit{interface}; poza obszarami istotnymi aerodynamicznie dopuszczalne jest stopniowe rozrzedzenie siatki. Jakość rozwiązania należy ocenić przez niezależność wyników od zagęszczenia siatki, monitorując przede wszystkim ciąg i moment.
 	
 	\section{Metoda BEMT jako obliczenie referencyjne}
-	Metoda BEMT (\textit{Blade Element Momentum Theory}) łączy opis lokalnego elementu łopaty z bilansem pędu strugi przechodzącej przez tarczę śmigła. W praktyce łopatę dzieli się na kilka pierścieniowych elementów. Dla każdego z nich, korzystając z geometrii oraz charakterystyk profilu, wyznacza się lokalne siły aerodynamiczne. Jednocześnie bilans pędu określa, jak śmigło zmienia prędkość powietrza.
+	Metoda BEMT (\textit{Blade Element Momentum Theory}) stanowi połączenie teorii elementu łopatkowego z jednowymiarową teorią pędu. W podejściu tym łopatę śmigła dzieli się wzdłuż promienia na dyskretne odcinki pierścieniowe. Dla każdego z przekrojów wyznacza się obciążenia aerodynamiczne w oparciu o lokalne warunki napływu i charakterystyki zastosowanego profilu, podczas gdy ogólny bilans pędu w tarczy śmigła umożliwia określenie prędkości indukowanych w strudze.
 	
-	Jest to celowo uproszczony model: nie odwzorowuje pełnego trójwymiarowego przepływu tak jak CFD, ale szybko wskazuje oczekiwany rząd wielkości wyniku i trendy zmian. Dzięki temu może być używany jako proste obliczenie wykonywane ręcznie, a po zautomatyzowaniu jako krótki algorytm obliczeniowy. Jego wyniki będą punktem odniesienia podczas oceny symulacji Fluent.
+	Mimo pominięcia złożonych, trójwymiarowych struktur przepływu, odwzorowywanych w symulacjach CFD, metoda ta pozwala na sprawne oszacowanie rzędu wielkości generowanych sił oraz wyznaczenie podstawowych trendów aerodynamicznych. Dzięki niskim wymaganiom obliczeniowym algorytm BEMT doskonale sprawdza się jako szybkie narzędzie analityczne, a otrzymane nim rezultaty służą w niniejszej pracy jako wstępny punkt odniesienia do walidacji wyników numerycznych ze środowiska ANSYS Fluent.
 	\subsection{Iteracyjny sposób działania}
 	Dla każdego elementu promieniowego powtarza się następujący cykl:
 	\begin{enumerate}[label=\arabic*.]
@@ -219,7 +219,7 @@
 		\end{tabular}
 	\end{table}
 	
-	Należy podkreślić, że wartość minimalnej ortogonalności (0,045) jest niższa od zalecanej. Jest to wynikiem kompromisu pomiędzy jakością siatki a ograniczeniem liczby elementów do ok. 1 miliona. Mimo to symulacje wykazały stabilną zbieżność, co sugeruje, że lokalnie słaba jakość siatki nie wpłynęła znacząco na wyniki.
+	Wartość minimalnej ortogonalności (0,045) jest niższa od zalecanego progu. Wynika to z przyjętego kompromisu pomiędzy gęstością siatki a czasem obliczeń, ograniczającego liczbę elementów do ok. 1 miliona. Mimo to symulacje wykazały stabilną zbieżność, co świadczy o tym, że lokalnie niższa jakość siatki nie zaburzyła przebiegu obliczeń.
 	
 	
 	\begin{figure}[H]
@@ -332,7 +332,7 @@
 			\textbf{Prędkość napływu} & \textbf{CFD (połówka)} & \textbf{CFD (całość)} \\
 			\(V_\infty\) [m/s] & \(T\) [N] & \(T\) [N] \\
 			\midrule
-			0  & 9,54  & 19,08 \\
+			0  & 8,85  & 17,70 \\
 			5  & 7,24  & 14,48 \\
 			10 & 6,37  & 12,74 \\
 			15 & 4,42  & 8,84  \\
@@ -343,7 +343,7 @@
 		\end{tabular}
 	\end{table}
 	
-	Ciąg śmigła maleje monotonicznie wraz ze wzrostem prędkości napływu. W warunkach statycznych (\(V_\infty = 0\) m/s) śmigło wytwarza największy ciąg (19,08 N), który przy \(V_\infty = 20\) m/s spada do 2,74 N, a powyżej tej prędkości zmienia znak na ujemny. Przejście w stan wiatrakowania (tryb hamulcowy) dla \(V_\infty \ge 25\) m/s jest fizycznie poprawnym zachowaniem śmigła i zostało odtworzone przez symulację.
+	Ciąg śmigła maleje monotonicznie wraz ze wzrostem prędkości napływu. W warunkach statycznych (\(V_\infty = 0\) m/s) śmigło wytwarza największy ciąg (17,70 N), który przy \(V_\infty = 20\) m/s spada do 2,74 N, a powyżej tej prędkości zmienia znak na ujemny. Przejście w stan wiatrakowania (tryb hamulcowy) dla \(V_\infty \ge 25\) m/s jest fizycznie poprawnym zachowaniem śmigła i zostało odtworzone przez symulację.
 	
 	\subsubsection{Charakterystyka momentu obrotowego}
 	Wartości momentu obrotowego dla poszczególnych prędkości napływu zestawiono w tabeli \ref{tab:torque_results_cfd}.
@@ -382,18 +382,18 @@
 			\textbf{Prędkość napływu} & \textbf{Moc} & \textbf{Sprawność} \\
 			\(V_\infty\) [m/s] & \(P\) [W] & \(\eta\) [\%] \\
 			\midrule
-			0  & 174,00   & 0,0   \\
-			5  & 192,00   & 37,7  \\
-			10 & 239,92   & 53,1  \\
-			15 & 198,00   & 67,0  \\
-			20 & 126,00   & 43,5  \\
-			25 & -9,99    & 0,0   \\
-			30 & -59,65   & 0,0   \\
+			0  & 182,21   & 0,0   \\
+			5  & 201,06   & 36,0  \\
+			10 & 251,25   & 50,7  \\
+			15 & 207,35   & 64,0  \\
+			20 & 131,95   & 41,5  \\
+			25 & -10,47   & 0,0   \\
+			30 & -62,47   & 0,0   \\
 			\bottomrule
 		\end{tabular}
 	\end{table}
 	
-	Sprawność śmigła osiąga maksimum w zakresie średnich prędkości napływu i gwałtownie maleje przy prędkościach skrajnych. Największą uzyskaną sprawność, wynoszącą ok. 67\%, zaobserwowano dla \(V_\infty = 15\) m/s. Dla prędkości powyżej \(V_\infty = 20\) m/s, gdy śmigło przechodzi w stan hamowania (moc ujemna), sprawność spada do zera.
+	Sprawność śmigła osiąga maksimum w zakresie średnich prędkości napływu i gwałtownie maleje przy prędkościach skrajnych. Największą uzyskaną sprawność, wynoszącą ok. 64,0\%, zaobserwowano dla \(V_\infty = 15\) m/s. Dla prędkości powyżej \(V_\infty = 20\) m/s, gdy śmigło przechodzi w stan hamowania (moc ujemna), sprawność spada do zera.
 	
 	\subsubsection{Prezentacja graficzna wyników CFD}
 	Zależności wyznaczone na podstawie symulacji CFD przedstawiono zbiorczo na rysunkach \ref{fig:cfd_sila}--\ref{fig:cfd_sprawnosc_J}: siłę ciągu i moment obrotowy w funkcji prędkości napływu (rys. \ref{fig:cfd_sila}, \ref{fig:cfd_moment}), sprawność w funkcji prędkości (rys. \ref{fig:cfd_sprawnosc}) oraz sprawność w funkcji współczynnika zaawansowania \(J\) (rys. \ref{fig:cfd_sprawnosc_J}).
@@ -473,7 +473,7 @@
 	\subsection{Walidacja wyników CFD z metodą BEMT}
 	
 	\subsubsection{Zestawienie porównawcze}
-	W tabeli \ref{tab:comparison} zestawiono wyniki metody BMT oraz symulacji CFD dla ciągu i momentu obrotowego wraz z błędem względnym liczonym względem wartości referencyjnej BMT. Ujemne wartości błędu oznaczają, że wynik CFD jest niższy od wyniku BMT, dodatnie -- że jest wyższy. Tabela \ref{tab:errors_comparison} zawiera błędy względne mocy i sprawności.
+	W tabeli \ref{tab:comparison} zestawiono wyniki metody BMT oraz symulacji CFD dla ciągu i momentu obrotowego wraz z błędem względnym liczonym względem wartości referencyjnej BMT. Ujemne wartości błędu oznaczają, że wynik CFD jest niższy od wyniku BMT, natomiast dodatnie wskazują na wartość wyższą. Tabela \ref{tab:errors_comparison} zawiera błędy względne mocy i sprawności.
 	
 	\begin{table}[H]
 		\centering
@@ -485,9 +485,9 @@
 			\(V_\infty\) & \(T_{\text{BMT}}\) & \(T_{\text{CFD}}\) & \(\delta T\) & \(Q_{\text{BMT}}\) & \(Q_{\text{CFD}}\) & \(\delta Q\) \\
  			{[m/s]} & {[N]} & {[N]} & {[\%]} & {[Nm]} & {[Nm]} & {[\%]} \\
 			\midrule
-			0  & 27,260  & 19,080  & -30,0  & 0,906  & 0,580  & -36,0 \\
+			0  & 27,260  & 17,700  & -35,1  & 0,906  & 0,580  & -36,0  \\
 			5  & 25,364  & 14,480  & -42,9  & 1,037  & 0,640  & -38,3 \\
-			10 & 21,394  & 12,739  & -40,5  & 1,072  & 0,800  & -25,4 \\
+			10 & 21,394  & 12,738  & -40,5  & 1,072  & 0,800  & -25,4 \\
 			15 & 15,105  & 8,840   & -41,5  & 0,919  & 0,660  & -28,2 \\
 			20 & 7,487   & 2,740   & -63,4  & 0,568  & 0,420  & -26,1 \\
 			25 & -1,505  & -4,001  & -165,9 & -0,035 & -0,033 & +4,8  \\
@@ -506,13 +506,13 @@
 			\(V_\infty\) & \(\delta P\) & \(\delta T\) & \(\delta Q\) & \(\delta\eta\) \\
 			{[m/s]} & {[\%]} & {[\%]} & {[\%]} & {[\%]} \\
 			\midrule
-			0  & -38,9  & -30,0  & -36,0  & 0,0   \\
-			5  & -41,1  & -42,9  & -38,3  & -3,1  \\
-			10 & -28,7  & -40,5  & -25,4  & -16,5 \\
-			15 & -31,4  & -41,5  & -28,2  & -14,7 \\
-			20 & -29,4  & -63,4  & -26,1  & -48,2 \\
-			25 & +9,6   & -165,9 & +4,8   & 0,0   \\
-			30 & +72,8  & +6,6   & +71,5  & 0,0   \\
+			0  & -36,0   & -35,1  & -36,0   & 0,0   \\
+			5  & -38,3  & -42,9  & -38,3  & -7,4  \\
+			10 & -25,4  & -40,5  & -25,4  & -20,3 \\
+			15 & -28,2  & -41,5  & -28,2  & -18,5 \\
+			20 & -26,1  & -63,4  & -26,1  & -50,5 \\
+			25 & +5,4   & -165,9 & +4,8   & 0,0   \\
+			30 & +71,5  & +6,6   & +71,5  & 0,0   \\
 			\bottomrule
 		\end{tabular}
 	\end{table}
@@ -562,22 +562,22 @@
 	\end{figure}
 	
 	\subsubsection{Porównanie ciągu}
-	Dla prędkości \(V_\infty = 30\) m/s, gdzie śmigło pracuje w trybie hamulcowym (ciąg ujemny), wyniki CFD porównano z obliczeniami metody BMT. Uzyskana różnica względna wynosi ok. \(+6{,}6\%\) (CFD: \(-9{,}28\) N, BMT: \(-9{,}94\) N), co jest wartością bardzo dobrą dla tego trudnego reżimu przepływu. W zakresie małych i średnich prędkości napływu symulacja CFD przewiduje niższe wartości ciągu niż metoda BMT, przy czym rozbieżności względne zawierają się w przedziale ok. 30--63\%. Wynika to z uproszczeń modelu analitycznego oraz zjawisk trójwymiarowych, których metoda BMT nie uwzględnia. Skok błędu względnego do ok. \(-166\%\) przy \(V_\infty = 25\) m/s wynika z przejścia przez zero ciągu BMT (bardzo mały mianownik błędu), a nie z rzeczywistego wzrostu rozbieżności bezwzględnej.
+	Dla prędkości \(V_\infty = 30\) m/s, gdy śmigło pracuje w trybie hamulcowym (ciąg ujemny), wyniki CFD porównano z obliczeniami BMT. Uzyskana różnica względna wynosi ok. \(+6{,}6\%\) (CFD: \(-9{,}28\) N, BMT: \(-9{,}94\) N), co stanowi dobrą zgodność obu metod w tym reżimie przepływu. W zakresie małych i średnich prędkości napływu symulacja CFD przewiduje niższe wartości ciągu niż metoda BMT, a rozbieżności względne zawierają się w przedziale ok. 35--63\%. Wynika to z uproszczeń modelu analitycznego oraz zjawisk trójwymiarowych, których metoda BMT nie uwzględnia. Skok błędu względnego do ok. \(-166\%\) przy \(V_\infty = 25\) m/s wynika z przejścia przez zero ciągu BMT (bardzo mały mianownik błędu), a nie z rzeczywistego wzrostu rozbieżności bezwzględnej.
 	
 	\subsubsection{Porównanie momentu obrotowego}
 	Dla prędkości \(V_\infty = 25\) m/s moment obrotowy obu metod przyjmuje niewielkie wartości ujemne (\(Q_{\text{CFD}} = -0{,}033\) Nm, \(Q_{\text{BMT}} = -0{,}035\) Nm), a błąd względny wynosi ok. \(+4{,}8\%\), co potwierdza dobrą zgodność w okolicy zmiany znaku. W zakresie pracy dodatniej (5--20 m/s) CFD przewiduje moment niższy o ok. 25--38\% niż BMT. Największy błąd względny (+71,5\%) występuje przy \(V_\infty = 30\) m/s, gdzie obie metody przewidują niewielkie wartości ujemne (\(-0{,}20\) Nm vs \(-0{,}70\) Nm).
 	
 	\subsection{Podsumowanie analizy CFD}
-	Przeprowadzone symulacje CFD pozwoliły na wyznaczenie charakterystyk aerodynamicznych śmigła dwułopatowego o średnicy \SI{0.5}{\meter} dla zakresu prędkości napływu od 0 do \SI{30}{\meter\per\second} przy stałej prędkości obrotowej \SI{3000}{rpm}. Zastosowanie metody MRF oraz modelu turbulencji \(k-\omega\) SST zapewniło stabilną zbieżność obliczeń oraz uzyskanie wiarygodnych wyników. Uzyskane charakterystyki wykazują zgodny z fizyką przebieg: ciąg maleje ze wzrostem prędkości napływu od 19,08 N w warunkach statycznych do \(-9{,}28\) N przy \(V_\infty = 30\) m/s, a maksymalna sprawność ok. 67\% jest osiągana przy \(V_\infty = 15\) m/s. W zakresie pracy hamulcowej wyniki CFD pozostają w dobrej zgodności z obliczeniami BMT (błąd względny ciągu ok. \(+6{,}6\%\)), co potwierdza poprawność modelu.
+	Przeprowadzone symulacje CFD pozwoliły na wyznaczenie charakterystyk aerodynamicznych śmigła dwułopatowego o średnicy \SI{0.5}{\meter} dla zakresu prędkości napływu od 0 do \SI{30}{\meter\per\second} przy stałej prędkości obrotowej \SI{3000}{rpm}. Zastosowanie metody MRF oraz modelu turbulencji \(k-\omega\) SST zapewniło stabilną zbieżność obliczeń oraz uzyskanie wiarygodnych wyników. Uzyskane charakterystyki wykazują zgodny z fizyką przebieg: ciąg maleje ze wzrostem prędkości napływu od 17,70 N w warunkach statycznych do \(-9{,}28\) N przy \(V_\infty = 30\) m/s, a maksymalna sprawność ok. 64,0\% jest osiągana przy \(V_\infty = 15\) m/s. W zakresie pracy hamulcowej wyniki CFD pozostają w dobrej zgodności z obliczeniami BMT (błąd względny ciągu ok. \(+6{,}6\%\)), co potwierdza poprawność modelu.
 	
 	\subsection{Analiza rozbieżności między metodami}
 	Porównanie wyników metod BMT i CFD ujawnia systematyczne rozbieżności, których źródła można podzielić na trzy grupy:
 	\begin{itemize}
-		\item \textbf{Uproszczenia metody BMT}: metoda elementów łopaty i pędu opiera się na założeniu dwuwymiarowego przepływu na każdym przekroju łopaty, nie uwzględnia w pełni efektów trójwymiarowych -- m.in. przepływów promieniowych, stref zwartego wiru końcowego oraz interakcji łopaty ze strugą. W rezultacie metoda BMT często zawyża ciąg i moment w zakresie małych prędkości napływu, co odpowiada obserwowanemu tu systematycznemu ujemnemu błędowi względnemu CFD (30--63\% mniejsze wartości w zakresie 0--20 m/s).
+		\item \textbf{Uproszczenia metody BMT}: metoda elementów łopaty i pędu opiera się na założeniu dwuwymiarowego przepływu na każdym przekroju łopaty, nie uwzględnia w pełni efektów trójwymiarowych, takich jak przepływy promieniowe, strefy zwartego wiru końcowego oraz interakcje łopaty ze strugą. W rezultacie metoda BMT często zawyża ciąg i moment w zakresie małych prędkości napływu, co odpowiada obserwowanemu tu ujemnemu błędowi względnemu CFD (35--63\% mniejsze wartości w zakresie 0--20 m/s).
 		\item \textbf{Ograniczenia symulacji CFD}: model MRF jest uproszczeniem, w którym łopaty nie obracają się względem domeny, a pole przepływu jest ustalone w wirującym układzie odniesienia; nie odtwarza to w pełni niestacjonarnych efektów rzeczywistego wirnika. Wpływ na wyniki mają również ustawienia solvera (schematy dyskretyzacji), jakość siatki oraz kryteria zbieżności. Lokalnie obniżona ortogonalność siatki (0,045) może dodatkowo ograniczać dokładność rozwiązania w obszarach dużych gradientów.
 		\item \textbf{Kwestie metodologiczne porównania}: duże błędy względne przy \(V_\infty = 25\) m/s nie odzwierciedlają faktycznej rozbieżności bezwzględnej, lecz wynikają z dzielenia przez bardzo małą wartość referencyjną w okolicy zmiany znaku ciągu. Podobnie błąd momentu +71,5\% przy 30 m/s dotyczy niewielkich wartości bezwzględnych i jest wrażliwy na różnice modelowe.
 	\end{itemize}
-	Ocena dokładności obu metod wymaga ustalenia wartości referencyjnej. W przypadku prostych geometrii i klasycznych powietrzy o znanej geometrii łopat, dobrze skalibrowana metoda BMT daje wyniki wystarczająco dokładne przy bardzo małym koszcie obliczeniowym. Symulacja CFD jest natomiast bardziej uniwersalna: uwzględnia rzeczywisty, trójwymiarowy charakter przepływu, efekt wirowy za łopatą oraz efekty lepkości, przez co może być dokładniejsza w przypadkach, w których BMT zawodzi, np. przy znacznym obciążeniu, w pobliżu opływu bliskiego oderwania oraz w zakresie pracy hamulcowej. Jednakże dokładność CFD jest silnie zależna od jakości siatki, doboru modelu turbulencji i poprawności warunków brzegowych, dlatego w niniejszym badaniu, na podstawie zgodności wyników w zakresie hamulcowym oraz fizycznie spójnych przebiegów charakterystyk, za wiarygodniejszą uznano metodę CFD, zalecając jednocześnie jej walidację z danymi eksperymentalnymi lub niezależnymi obliczeniami (np. metoda panelową lub niestacjonarnym uruchamianiem solvera).
+	Ocena dokładności obu metod wymaga ustalenia wartości referencyjnej. W przypadku prostych geometrii i klasycznych profili o znanej geometrii łopat, dobrze skalibrowana metoda BMT daje wyniki wystarczająco dokładne przy bardzo małym koszcie obliczeniowym. Symulacja CFD jest natomiast bardziej uniwersalna: uwzględnia rzeczywisty, trójwymiarowy charakter przepływu, efekt wirowy za łopatą oraz efekty lepkości, przez co może być dokładniejsza w przypadkach, w których BMT zawodzi, np. przy znacznym obciążeniu, w pobliżu opływu bliskiego oderwania oraz w zakresie pracy hamulcowej. Jednakże dokładność CFD jest silnie zależna od jakości siatki, doboru modelu turbulencji i poprawności warunków brzegowych, dlatego w niniejszym badaniu, na podstawie zgodności wyników w zakresie hamulcowym oraz fizycznie spójnych przebiegów charakterystyk, za wiarygodniejszą uznano metodę CFD, zalecając jednocześnie jej walidację z danymi eksperymentalnymi lub niezależnymi obliczeniami (np. metodą panelową lub z niestacjonarnym uruchamianiem solvera).
 	
 	\newpage
 	\section{Wnioski końcowe}
@@ -585,7 +585,7 @@
 		\item Metoda BMT pozwoliła na szybkie oszacowanie podstawowych charakterystyk aerodynamicznych śmigła, takich jak ciąg, moment obrotowy, moc i sprawność, w funkcji prędkości lotu.
 		\item Symulacje CFD wykonane w programie ANSYS Fluent uzupełniły zestaw wyników o punkty pracy w całym zakresie prędkości napływu 0--30 m/s, co umożliwiło pełny opis charakterystyk śmigła, w tym punkt statyczny oraz zakres hamulcowy.
 		\item Zaobserwowano, że dla prędkości \(V_\infty > 20\) m/s śmigło przechodzi w tryb hamulcowy (ciąg ujemny), co jest zjawiskiem fizycznie poprawnym i zostało odwzorowane przez obie metody.
-		\item Największa sprawność śmigła, wynosząca ok. 67\%, została osiągnięta dla prędkości napływu 15 m/s. W zakresie małych i średnich prędkości napływu symulacja CFD przewiduje niższe wartości ciągu niż metoda BMT (o ok. 30--63\%), co wynika z uproszczeń modelu analitycznego oraz efektów trójwymiarowych nieuwzględnianych przez BMT.
+		\item Największa sprawność śmigła, wynosząca ok. 64,0\%, została osiągnięta dla prędkości napływu 15 m/s. W zakresie małych i średnich prędkości napływu symulacja CFD przewiduje niższe wartości ciągu niż metoda BMT (o ok. 35--63\%), co wynika z uproszczeń modelu analitycznego oraz efektów trójwymiarowych nieuwzględnianych przez BMT.
 		\item W zakresie pracy hamulcowej (\(V_\infty = 30\) m/s) błąd względny ciągu CFD względem BMT wynosi zaledwie ok. \(+6{,}6\%\), co wskazuje na dobrą zgodność obu metod w tym reżimie przepływu. Duże błędy względne w okolicy 25 m/s wynikają z dzielenia przez niemal zerową wartość referencyjną, a nie ze znaczących różnic bezwzględnych.
 		\item Mimo że jakość siatki (minimalna ortogonalność na poziomie 0,045) odbiega od zaleceń, symulacje wykazały stabilną zbieżność, co sugeruje, że lokalnie słaba jakość siatki nie wpłynęła znacząco na wyniki.
 		\item Symulacja CFD uwzględnia trójwymiarowe i lepkie efekty przepływu, dlatego uznano ją za metodę bardziej uniwersalną i wiarygodniejszą w rozpatrywanych zakresach pracy; ostateczna weryfikacja wymaga jednak porównania z danymi eksperymentalnymi lub niezależną metodą obliczeniową.
