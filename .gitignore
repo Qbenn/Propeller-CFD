@@ -1,0 +1,50 @@
+# ANSYS / symulacje (duże foldery wynikowe)
+Propeller_files/
+projekt 2_files/
+propeller 3_files/
+.Propeller_files.backup/
+mesh 0 ms/
+
+# oryginalny folder BMT (kopia w bmt/) oraz skrypty pomocnicze
+/BMF/
+cleanup-fluent-*.bat
+
+# duże pliki symulacyjne
+FFF-2.1-Setup-Output.cas.h5
+
+# zduplikowane pliki .prt z poziomu głównego (właściwe modele w model/)
+/r*.prt
+/model1.prt
+
+# LaTeX - pliki tymczasowe
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.synctex.gz
+*.nav
+*.snm
+*.vrb
+*.bbl
+*.blg
+main.fls
+main.fdb_latexmk
+main.run.xml
+
+# zduplikowane pliki LaTeX z poziomu głównego (aktualne są w raport/)
+/main.aux
+/main.log
+/main.out
+/main.synctex.gz
+/main.toc
+/main.pdf
+/main.tex
+/main.lof
+/main.lot
+
+# systemowe
+Thumbs.db
+Desktop.ini
+.DS_Store

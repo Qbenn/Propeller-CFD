@@ -1,0 +1,18 @@
+====== WYNIKI OBLICZEN BEMT DLA V = 0 m/s ======
+Ciag calkowity T = 27.260 N
+Moment obrotowy Q = 0.906 Nm
+Moc pobierana P = 284.625 W
+Sprawnosc smigla eta = 0.000
+Wspolczynnik ciagu CT = 0.1424
+Wspolczynnik mocy CP = 0.0595
+Liczba postepu J = 0.0000
+
+Szczegoly dla poszczegolnych stacji lopaty:
+r/R   a          a'         V_ax[m/s]  dT[N]      dQ[Nm]
+0.20     inf       0.0709        2.853     0.1174     0.0023
+0.35     inf       0.0745        6.367     2.0472     0.0576
+0.50     inf       0.0533        8.013     4.6072     0.1504
+0.65     inf       0.0346        8.776     7.0114     0.2296
+0.80     inf       0.0247        9.195     8.6014     0.2901
+0.95     inf       0.0206       10.096     4.8751     0.1759
+1.00     inf       0.9947        0.138     0.0000     0.0000
