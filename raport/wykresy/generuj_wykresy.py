@@ -46,8 +46,17 @@ def load_cfd_data(excel_path):
             col_map[col] = 'Sprawnosc'
         elif 'J' in col:
             col_map[col] = 'J'
-            
+
+    unmapped = [c for c in df.columns if c not in col_map]
     df = df.rename(columns=col_map)
+
+    missing = [c for c in ['V', 'Sila', 'Moment'] if c not in df.columns]
+    if missing:
+        raise KeyError(
+            f"Nie rozpoznano wymaganych kolumn {missing} w pliku Excel. "
+            f"Dostepne kolumny: {list(df.columns)}"
+            + (f" (niezmapowane: {unmapped})" if unmapped else "")
+        )
     
     # Czyszczenie i konwersja typów danych
     for c in ['V', 'Sila', 'Moment', 'Moc', 'Sprawnosc', 'J']:
@@ -247,7 +256,8 @@ def create_charts():
         errs = []
         for c, b in zip(cfd_vals, bmt_vals):
             if b == 0:
-                errs.append(0.0)
+                # Brak sensownej definicji bledu wzglednego przy zerowym mianowniku
+                errs.append(np.nan)
             else:
                 errs.append(((c - b) / abs(b)) * 100.0)
         return np.array(errs)
@@ -259,11 +269,14 @@ def create_charts():
 
     # Helper do dodawania ulepszonych adnotacji
     def annotate_errors(ax, v_vals, err_vals):
-        y_min, y_max = min(err_vals), max(err_vals)
+        valid = [e for e in err_vals if not np.isnan(e)]
+        y_min, y_max = (min(valid), max(valid)) if valid else (0.0, 1.0)
         margin = max(abs(y_min), abs(y_max)) * 0.25 if max(abs(y_min), abs(y_max)) > 0 else 10
         ax.set_ylim(y_min - margin, y_max + margin)
-        
+
         for v, e in zip(v_vals, err_vals):
+            if np.isnan(e):
+                continue
             offset = (8 if e >= 0 else -14)
             ax.annotate(f'{e:+.1f}%', (v, e), textcoords="offset points", xytext=(0, offset),
                         ha='center', fontsize=8.5, fontweight='bold', color='#4A148C',
@@ -337,8 +350,11 @@ def create_charts():
     txt_content.append("\n3. BŁĘDY WZGLĘDNE METODY CFD WZGLĘDEM BMT [(CFD - BMT) / |BMT| * 100%]:")
     txt_content.append(f"{'V [m/s]':>8} | {'err_T [%]':>11} | {'err_Q [%]':>11} | {'err_P [%]':>11} | {'err_eta [%]':>12}")
     txt_content.append("-" * 65)
+    def fmt_err(e):
+        return "      --  " if (e is None or np.isnan(e)) else f"{e:+11.2f}%"
     for v, et, eq, ep, ee in zip(df_cfd['V'], err_sila, err_moment, err_moc, err_sprawnosc):
-        txt_content.append(f"{v:8.1f} | {et:+11.2f}% | {eq:+11.2f}% | {ep:+11.2f}% | {ee:+12.2f}%")
+        ee_str = "         --%" if (ee is None or np.isnan(ee)) else f"{ee:+12.2f}%"
+        txt_content.append(f"{v:8.1f} | {fmt_err(et)} | {fmt_err(eq)} | {fmt_err(ep)} | {ee_str}")
 
     txt_content.append("\n" + "="*85)
 

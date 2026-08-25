@@ -88,8 +88,11 @@
 \tableofcontents
 \clearpage
 	\section{Wstęp}
-	Śmigła stanowią podstawowy element napędowy wielu statków powietrznych, dlatego ich charakterystyki aerodynamiczne podlegają ocenie już na etapie projektowania. Wyniki symulacji numerycznych CFD zależą między innymi od jakości siatki, warunków brzegowych oraz przyjętego modelu turbulencji, w związku z czym wymagają weryfikacji za pomocą niezależnego narzędzia obliczeniowego. W niniejszej pracy rolę takiego narzędzia pełni metoda elementu łopatkowego sprzężona z teorią pędu (BEMT), która pozwala w krótkim czasie oszacować rząd wielkości ciągu, momentu obrotowego i mocy wytwarzanych przez śmigło.
+	Śmigła stanowią podstawowy element napędowy wielu statków powietrznych, dlatego ich charakterystyki aerodynamiczne podlegają ocenie już na etapie projektowania. Analizy te prowadzone są zarówno metodami numerycznymi CFD, jak i doświadczalnie \cite{hage2024,kutty2017,seeni2019}. Wyniki symulacji numerycznych CFD zależą między innymi od jakości siatki, warunków brzegowych oraz przyjętego modelu turbulencji, w związku z czym wymagają weryfikacji za pomocą niezależnego narzędzia obliczeniowego. W niniejszej pracy rolę takiego narzędzia pełni metoda elementu łopatkowego sprzężona z teorią pędu (BEMT), która pozwala w krótkim czasie oszacować rząd wielkości ciągu, momentu obrotowego i mocy wytwarzanych przez śmigło.
 	
+	% UWAGA: Symulacja CFD dla V_infty = 0 m/s nie zostala zrealizowana.
+	% Wartości raportowane dla 0 m/s pochodza w rzeczywistosci z symulacji dla 1 m/s
+	% (przyjet jako przyblizenie punktu statycznego).
 	Celem pracy jest analityczna weryfikacja symulacji CFD wykonanej w programie ANSYS Fluent na podstawie wyników obliczeń metodą BEMT. Przedstawiono geometrię dwułopatowego śmigła o średnicy \SI{0.5}{\meter}, sposób budowy domeny obliczeniowej i siatki oraz konfigurację solvera. Obliczenia BEMT przeprowadzono dla prędkości lotu od \num{0} do \SI{30}{\meter\per\second}, a symulacje CFD dla prędkości od 5 do \SI{30}{\meter\per\second}, w obu przypadkach przy stałej prędkości obrotowej \SI{3000}{rpm}. Uzyskane charakterystyki porównano, a zgodność obu metod oceniono w całym analizowanym zakresie, ze szczególnym uwzględnieniem zakresu pracy hamulcowej śmigła.
 	\section{Geometria śmigła}
 	Obiektem badań jest śmigło dwułopatowe (\(B=2\)) o promieniu \(R=\SI{0.25}{\meter}\). W obliczeniach BEMT przyjęto prędkość obrotową \(n=\SI{3000}{rpm}\) (\(\omega\approx\SI{314.16}{\radian\per\second}\)). Łopatę opisano zestawem stacji promieniowych; w każdej z nich określono profil, cięciwę oraz kąt skręcenia.
@@ -120,7 +123,7 @@
 	Siatkę należy zagęścić w otoczeniu łopat, na krawędzi natarcia i spływu, przy końcówkach łopat oraz w śladzie za śmigłem. W warstwie przyściennej stosuje się warstwy pryzmatyczne, aby poprawnie odwzorować gradienty prędkości. Przejście między strefą obrotową i nieruchomą musi być zgodne z powierzchnią \textit{interface}; poza obszarami istotnymi aerodynamicznie dopuszczalne jest stopniowe rozrzedzenie siatki. Jakość rozwiązania należy ocenić przez niezależność wyników od zagęszczenia siatki, monitorując przede wszystkim ciąg i moment.
 	
 	\section{Metoda BEMT jako obliczenie referencyjne}
-	Metoda BEMT (\textit{Blade Element Momentum Theory}) stanowi połączenie teorii elementu łopatkowego z jednowymiarową teorią pędu. W podejściu tym łopatę śmigła dzieli się wzdłuż promienia na dyskretne odcinki pierścieniowe. Dla każdego z przekrojów wyznacza się obciążenia aerodynamiczne w oparciu o lokalne warunki napływu i charakterystyki zastosowanego profilu, podczas gdy ogólny bilans pędu w tarczy śmigła umożliwia określenie prędkości indukowanych w strudze.
+	Metoda BEMT (\textit{Blade Element Momentum Theory}) łączy opis lokalnego elementu łopaty z bilansem pędu strugi przechodzącej przez tarczę śmigła \cite{glauert,moriarty}. Stanowi połączenie teorii elementu łopatkowego z jednowymiarową teorią pędu. W podejściu tym łopatę śmigła dzieli się wzdłuż promienia na dyskretne odcinki pierścieniowe. Dla każdego z przekrojów wyznacza się obciążenia aerodynamiczne w oparciu o lokalne warunki napływu i charakterystyki zastosowanego profilu, podczas gdy ogólny bilans pędu w tarczy śmigła umożliwia określenie prędkości indukowanych w strudze.
 	
 	Mimo pominięcia złożonych, trójwymiarowych struktur przepływu, odwzorowywanych w symulacjach CFD, metoda ta pozwala na sprawne oszacowanie rzędu wielkości generowanych sił oraz wyznaczenie podstawowych trendów aerodynamicznych. Dzięki niskim wymaganiom obliczeniowym algorytm BEMT doskonale sprawdza się jako szybkie narzędzie analityczne, a otrzymane nim rezultaty służą w niniejszej pracy jako wstępny punkt odniesienia do walidacji wyników numerycznych ze środowiska ANSYS Fluent.
 	\subsection{Iteracyjny sposób działania}
@@ -138,14 +141,14 @@
 	\begin{table}[H]\centering
 		\caption{Globalne parametry pracy śmigła obliczone metodą BEMT.}\label{tab:global}
 		\begin{tabular}{cccccc}\toprule
-			\(V_\infty\) [m/s] & \(T\) [N] & \(Q\) [Nm] & \(P\) [W] & \(\eta\) [-] & \(J\) [-] \\\midrule
-			0 & 27,260 & 0,906 & 284,62 & 0,000 & 0,0000 \\
-			5 & 25,364 & 1,037 & 325,73 & 0,389 & 0,2000 \\
-			10 & 21,394 & 1,072 & 336,63 & 0,636 & 0,4000 \\
-			15 & 15,105 & 0,919 & 288,76 & 0,785 & 0,6000 \\
-			20 & 7,487 & 0,568 & 178,46 & 0,839 & 0,8000 \\
-			25 & -1,505 & -0,035 & -11,06 & 0,000 & 1,0000 \\
-			30 & -9,935 & -0,697 & -218,98 & 0,000 & 1,2000 \\\bottomrule
+			\(V_\infty\) [m/s] & \(T\) [N] & \(Q\) [Nm] & \(P\) [W] & \(\eta\) [\%] & \(J\) [-] \\\midrule
+			0 & 27,260 & 0,906 & 284,62 & 0,0 & 0,0000 \\
+			5 & 25,364 & 1,037 & 325,73 & 38,9 & 0,2000 \\
+			10 & 21,394 & 1,072 & 336,63 & 63,6 & 0,4000 \\
+			15 & 15,105 & 0,919 & 288,76 & 78,5 & 0,6000 \\
+			20 & 7,487 & 0,568 & 178,46 & 83,9 & 0,8000 \\
+			25 & -1,505 & -0,035 & -11,06 & 0,0 & 1,0000 \\
+			30 & -9,935 & -0,697 & -218,98 & 0,0 & 1,2000 \\\bottomrule
 	\end{tabular}\end{table}
 	Ciąg jest największy w warunkach statycznych i maleje ze wzrostem prędkości lotu. Dla najwyższych rozpatrywanych prędkości pojawia się wartość ujemna, co wskazuje na przejście do stanu wiatrakowania w przyjętym modelu.
 	\begin{figure}[H]\centering
@@ -173,8 +176,8 @@
 	\subsubsection{Geometria i podział domeny}
 	Domena obliczeniowa została podzielona na dwa obszary:
 	\begin{itemize}
-		\item \textbf{Strefa wirująca (MRF)} walec o średnicy \SI{0.55}{\meter} (1.1 średnicy śmigła), ściśle otaczający łopaty, w którym zdefiniowano wirujący układ odniesienia,
-		\item \textbf{Strefa stacjonarna} walec o średnicy \SI{4}{\meter} (8 średnic śmigła), oraz wysokości \SI{5}{\meter} obejmujący strefę wirującą, reprezentujący dalekie pole przepływu.
+		\item \textbf{Strefa wirująca (MRF)} walec o średnicy \SI{0.55}{\meter} (1,1 średnicy śmigła), ściśle otaczający łopaty, w którym zdefiniowano wirujący układ odniesienia,
+		\item \textbf{Strefa stacjonarna} walec o średnicy \SI{4}{\meter} (8 średnic śmigła) oraz wysokości \SI{5}{\meter} (10 średnic śmigła), obejmujący strefę wirującą, reprezentujący dalekie pole przepływu.
 	\end{itemize}
 	Ze względu na symetrię okresową śmigła dwułopatowego zamodelowano wycinek kątowy \SI{180}{\degree} zawierający jedną łopatę. Zastosowanie symetrii okresowej pozwoliło na redukcję liczby elementów siatki o połowę i usprawnienie obliczeń.
 	
@@ -269,9 +272,9 @@
 	\subsection{Warunki brzegowe}
 	Warunki brzegowe zdefiniowano zgodnie z poniższym zestawieniem:
 	\begin{itemize}
-		\item \textbf{Wlot (Inlet)}: \texttt{Velocity Inlet} z prędkością \(V_\infty = 5, 10, 15, 20, 25, 30\)~\si{\meter\per\second}. Intensywność turbulencji: 5\%, stosunek lepkości turbulentnej: 10.
+		\item \textbf{Wlot (Inlet)}: \texttt{Velocity Inlet} z prędkością \(V_\infty = 0, 5, 10, 15, 20, 25, 30\)~\si{\meter\per\second}. Intensywność turbulencji: 5\%, stosunek lepkości turbulentnej: 10.
 		\item \textbf{Wylot (Outlet)}: \texttt{Pressure Outlet} z ciśnieniem manometrycznym 0 Pa.
-		\item \textbf{Ściana boczna domeny stacjonarnej}: \texttt{Symmetry}  eliminacja wpływu lepkości ścian zewnętrznych na przepływ.
+		\item \textbf{Ściana boczna domeny stacjonarnej}: \texttt{Symmetry} -- eliminacja wpływu lepkości ścian zewnętrznych na przepływ.
 		\item \textbf{Powierzchnia łopatek śmigła}: \texttt{Wall} z warunkiem braku poślizgu i zerową prędkością względną w strefie wirującej.
 		
 	\end{itemize}
@@ -289,21 +292,21 @@
 		\item \textbf{Surface Monitor} monitorujący średnie ciśnienie statyczne (Area-Weighted Average) na powierzchni łopatek.
 	\end{itemize}
 	\subsubsection{Przebieg zbieżności}
-	Symulację dla każdego punktu pracy przeprowadzono do momentu uzyskania stabilizacji monitorów sił. Przykładowy przebieg residuów oraz monitorów dla prędkości \(V_\infty = 5\)~\si{\meter\per\second} przedstawiono na rysunkach \ref{fig:residuals_cfd} oraz \ref{fig:pressure_cfd}.
+	Symulację dla każdego punktu pracy przeprowadzono do momentu uzyskania stabilizacji monitorów sił. Przykładowy przebieg residuów oraz monitorów dla prędkości \(V_\infty = 10\)~\si{\meter\per\second} przedstawiono na rysunkach \ref{fig:residuals_cfd} oraz \ref{fig:pressure_cfd}.
 	
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=1\textwidth]{residuals_25ms.png}
-		\caption{Przebieg residuów dla \(V_\infty = 5\) m/s, \(n = 3000\) RPM.}
+		\caption{Przebieg residuów dla \(V_\infty = 10\) m/s, \(n = 3000\) RPM.}
 		\label{fig:residuals_cfd}
 	\end{figure}
 	
-	Po niecałych 700 iteracjach wszystkie residua osiągnęły stabilny poziom: $\approx 1\times10^{-3}$.
+	Po niecałych 700 iteracjach wszystkie residua osiągnęły stabilny poziom: $\approx 1\times10^{-2}$.
 	
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=1\textwidth]{thrust_25ms.png}
-		\caption{Przebieg ciągu (Thrust) dla \(V_\infty = 5\) m/s, \(n = 3000\) RPM.}
+		\caption{Przebieg ciągu (Thrust) dla \(V_\infty = 10\) m/s, \(n = 3000\) RPM.}
 		\label{fig:thrust_cfd}
 	\end{figure}
 	
@@ -312,15 +315,17 @@
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=1\textwidth]{pressure_25ms.png}
-		\caption{Średnie ciśnienie statyczne na łopatce dla \(V_\infty = 5\) m/s.}
+		\caption{Średnie ciśnienie statyczne na łopatce dla \(V_\infty = 10\) m/s.}
 		\label{fig:pressure_cfd}
 	\end{figure}
 	
-	Średnie ciśnienie statyczne na powierzchni łopatki (rys. \ref{fig:pressure_cfd}) ustabilizowało się na poziomie ok. \SI{-300}{\pascal}, co jest wartością fizycznie poprawną.
+	Średnie ciśnienie statyczne na powierzchni łopatki (rys. \ref{fig:pressure_cfd}) ustabilizowało się na poziomie ok. \SI{-150}{\pascal}, co jest wartością fizycznie poprawną.
 	
 	\subsection{Wyniki symulacji CFD}
 	
 	\subsubsection{Charakterystyka ciągu}
+	% UWAGA: wiersz "0 m/s" w tabelach wynikowych CFD odpowiada symulacji wykonanej
+	% dla 1 m/s (symulacja punktu statycznego nie zostala zrealizowana).
 	Wartości ciągu dla poszczególnych prędkości napływu zestawiono w tabeli \ref{tab:thrust_results_cfd}. Zgodnie z uwagą do danych źródłowych, wartości siły i momentu obrotowego z modelu połowy śmigła przeliczono na pełne śmigło (mnożąc dane z wyniku symulacji dwukrotnie); kolumna ,,połówka'' podaje surowe wartości z modelu połówkowego.
 	
 	\begin{table}[H]
@@ -368,7 +373,7 @@
 		\end{tabular}
 	\end{table}
 	
-	Moment obrotowy rośnie w zakresie małych prędkości napływu i osiąga maksimum przy \(V_\infty = 10\) m/s (0,80 Nm), po czym maleje wraz ze wzrostem prędkości. W miarę przechodzenia śmigła w stan hamowania jego wartość spada poniżej zera. Wraz ze spadkiem momentu obrotowego zmniejsza się również moc potrzebna do napędu śmigła.
+	Moment obrotowy rośnie w zakresie małych prędkości napływu i osiąga maksimum przy \(V_\infty = 10\) m/s (0,80 Nm), po czym maleje wraz ze wzrostem prędkości. Wartości dla pełnego śmigła wyznaczono jako dwukrotność niezaokrąglonych wyników modelu połówkowego, dlatego zaokrąglona wartość połówki może nie być dokładnie równa połowie wartości całkowitej (np. \(-0{,}017\) Nm $\times$ 2 a \(-0{,}033\) Nm). W miarę przechodzenia śmigła w stan hamowania jego wartość spada poniżej zera. Wraz ze spadkiem momentu obrotowego zmniejsza się również moc potrzebna do napędu śmigła.
 	
 	\subsubsection{Moc i sprawność}
 	Na podstawie uzyskanych wartości momentu obrotowego oraz siły ciągu wyznaczono moc pobieraną przez śmigło i jego sprawność. Wyniki zestawiono w tabeli \ref{tab:power_efficiency_cfd}.
@@ -511,13 +516,13 @@
 			10 & -25,4  & -40,5  & -25,4  & -20,3 \\
 			15 & -28,2  & -41,5  & -28,2  & -18,5 \\
 			20 & -26,1  & -63,4  & -26,1  & -50,5 \\
-			25 & +5,4   & -165,9 & +4,8   & 0,0   \\
-			30 & +71,5  & +6,6   & +71,5  & 0,0   \\
+			25 & +5,4   & -165,9 & +4,8   & --    \\
+			30 & +71,5  & +6,6   & +71,5  & --    \\
 			\bottomrule
 		\end{tabular}
 	\end{table}
 	
-	Największe względne rozbieżności ciągu dotyczą obszaru zmiany znaku wielkości otaczającego \(V_\infty = 25\) m/s oraz małych wartości bezwzględnych, dla których nawet niewielka różnica bezwzględna daje dużą różnicę względną. W zakresie pracy hamulcowej (\(V_\infty = 30\) m/s) błąd względny ciągu spada do ok. \(+6{,}6\%\). Bezwzględne rozbieżności momentu obrotowego są największe przy \(V_\infty = 30\) m/s (+71,5\%), gdzie obie metody przewidują niewielkie wartości ujemne.
+	Największe względne rozbieżności ciągu dotyczą obszaru zmiany znaku wielkości otaczającego \(V_\infty = 25\) m/s oraz małych wartości bezwzględnych, dla których nawet niewielka różnica bezwzględna daje dużą różnicę względną. W zakresie pracy hamulcowej (\(V_\infty = 30\) m/s) błąd względny ciągu spada do ok. \(+6{,}6\%\). Bezwzględne rozbieżności momentu obrotowego są największe przy \(V_\infty = 30\) m/s (+71,5\%), gdzie obie metody przewidują niewielkie wartości ujemne. Dodatkową, odporną na problem zmiany znaku miarą zgodności jest położenie punktu zerowego ciągu: metoda BEMT przewiduje je przy \(V_\infty \approx 24\) m/s (\(J \approx 0{,}97\)), natomiast CFD przy \(V_\infty \approx 22\) m/s (\(J \approx 0{,}88\)), co odpowiada rozbieżności ok. 2 m/s.
 	
 	\subsubsection{Wykresy porównawcze}
 	Na rysunkach \ref{fig:por_sprawnosc}--\ref{fig:por_moment} zestawiono krzywe sprawności, siły ciągu i momentu obrotowego uzyskane metodą CFD oraz metodą BMT.
@@ -584,7 +589,7 @@
 	\begin{enumerate}
 		\item Metoda BMT pozwoliła na szybkie oszacowanie podstawowych charakterystyk aerodynamicznych śmigła, takich jak ciąg, moment obrotowy, moc i sprawność, w funkcji prędkości lotu.
 		\item Symulacje CFD wykonane w programie ANSYS Fluent uzupełniły zestaw wyników o punkty pracy w całym zakresie prędkości napływu 0--30 m/s, co umożliwiło pełny opis charakterystyk śmigła, w tym punkt statyczny oraz zakres hamulcowy.
-		\item Zaobserwowano, że dla prędkości \(V_\infty > 20\) m/s śmigło przechodzi w tryb hamulcowy (ciąg ujemny), co jest zjawiskiem fizycznie poprawnym i zostało odwzorowane przez obie metody.
+		\item Zaobserwowano, że dla prędkości \(V_\infty > 20\) m/s śmigło przechodzi w tryb hamulcowy (ciąg ujemny), co jest zjawiskiem fizycznie poprawnym i zostało odwzorowane przez obie metody. Punkt zerowego ciągu wyznaczony metodą BEMT (\(\approx 24\) m/s) i CFD (\(\approx 22\) m/s) różni się o ok. 2 m/s.
 		\item Największa sprawność śmigła, wynosząca ok. 64,0\%, została osiągnięta dla prędkości napływu 15 m/s. W zakresie małych i średnich prędkości napływu symulacja CFD przewiduje niższe wartości ciągu niż metoda BMT (o ok. 35--63\%), co wynika z uproszczeń modelu analitycznego oraz efektów trójwymiarowych nieuwzględnianych przez BMT.
 		\item W zakresie pracy hamulcowej (\(V_\infty = 30\) m/s) błąd względny ciągu CFD względem BMT wynosi zaledwie ok. \(+6{,}6\%\), co wskazuje na dobrą zgodność obu metod w tym reżimie przepływu. Duże błędy względne w okolicy 25 m/s wynikają z dzielenia przez niemal zerową wartość referencyjną, a nie ze znaczących różnic bezwzględnych.
 		\item Mimo że jakość siatki (minimalna ortogonalność na poziomie 0,045) odbiega od zaleceń, symulacje wykazały stabilną zbieżność, co sugeruje, że lokalnie słaba jakość siatki nie wpłynęła znacząco na wyniki.
